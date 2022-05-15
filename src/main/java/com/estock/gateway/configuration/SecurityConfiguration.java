@@ -44,7 +44,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.cors();
         http.csrf().disable().headers().frameOptions().sameOrigin().and().formLogin().disable().authorizeRequests()
-                .antMatchers("/api/v1.0/gateway/market/authenticate", "/api/v1.0/market/addusers","/swagger-ui.html/**", "/swagger-resources/** ",
+                .antMatchers("/api/v1.0/gateway/market/authenticate", "/api/v1.0/gateway/market/register","/swagger-ui.html/**", "/swagger-resources/** ",
                         "/webjars/springfox-swagger-ui/**", "/v2/api-docs", "/spring-security-rest/**")
                 .permitAll()
                 .anyRequest().authenticated().and().exceptionHandling()

@@ -3,15 +3,20 @@ package com.estock.gateway.controller;
 import com.estock.gateway.configuration.JWTutil;
 import com.estock.gateway.entity.AuthenticationRequest;
 import com.estock.gateway.entity.AuthenticationResponse;
+import com.estock.gateway.entity.CreateUserResponseModel;
+import com.estock.gateway.entity.CreateusrRequestModel;
 import com.estock.gateway.service.EStockUserdetails;
+import com.estock.gateway.service.UserRegistrationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,15 +33,18 @@ public class AuthenticationController {
 
     private final EStockUserdetails userDetailsService;
 
+    private final UserRegistrationService userRegistrationService;
+
 
 
     @Autowired
     public AuthenticationController(AuthenticationManager authenticationManager, JWTutil jwtTokenUtil,
-                                    EStockUserdetails userDetailsService) {
+                                    EStockUserdetails userDetailsService, UserRegistrationService userRegistrationService) {
         super();
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
+        this.userRegistrationService  = userRegistrationService;
 
     }
 
@@ -58,5 +66,14 @@ public class AuthenticationController {
         return ResponseEntity.ok(authresponse);
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<CreateUserResponseModel> createUser(@Validated @RequestBody CreateusrRequestModel userDetails)
+    {
+        System.out.println("Request came");
+        CreateUserResponseModel userResponseModel = userRegistrationService.creatuser(userDetails);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResponseModel);
+
+
+    }
 
 }
